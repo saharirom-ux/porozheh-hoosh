@@ -9,7 +9,7 @@
     "ios": "expo start --ios"
   },
   "dependencies": {
-    "@expo/vector-icons": "^14.1.0",
+    "@expo/vector-icons": "^15.0.3",
     "@noble/ciphers": "^1.2.1",
     "@noble/curves": "^1.9.1",
     "@noble/hashes": "^1.8.0",
@@ -20,6 +20,7 @@
     "expo-file-system": "~19.0.16",
     "expo-image-picker": "~17.0.8",
     "expo-secure-store": "~15.0.7",
+    "expo-sharing": "~14.0.8",
     "expo-status-bar": "~3.0.8",
     "react": "19.1.0",
     "react-native": "0.81.5"

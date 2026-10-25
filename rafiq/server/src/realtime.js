@@ -74,7 +74,7 @@ const handlers = {
       chatId,
       senderId: userId,
       keyVersion,
-      kind: ['text', 'reaction', 'system'].includes(msg.kind) ? msg.kind : 'text',
+      kind: ['text', 'reaction', 'system', 'file'].includes(msg.kind) ? msg.kind : 'text',
       body: msg.body,
     });
 

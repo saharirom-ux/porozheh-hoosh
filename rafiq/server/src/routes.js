@@ -1,8 +1,8 @@
 import path from 'node:path';
+import fs from 'node:fs';
 import crypto from 'node:crypto';
 import express from 'express';
 import cors from 'cors';
-import multer from 'multer';
 import { config } from './config.js';
 import { hashPassword, verifyPassword, signToken, bearerOf, verifyToken } from './auth.js';
 import * as store from './db.js';
@@ -263,18 +263,35 @@ router.post('/chats/:id/keys', requireAuth, (req, res) => {
 
 // ---------------------------------------------------------------- files
 
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: config.filesDir,
-    filename: (_req, file, cb) => cb(null, crypto.randomUUID()),
-  }),
-  limits: { fileSize: config.maxUploadBytes },
-});
+/**
+ * Files arrive as base64 JSON rather than multipart: React Native's FormData +
+ * Blob handling is unreliable, and the bytes are opaque ciphertext anyway.
+ */
+router.post('/upload', requireAuth, (req, res) => {
+  const body = req.body || {};
+  const dataBase64 = String(body.dataBase64 || '');
+  const mime = String(body.mime || 'application/octet-stream').slice(0, 120);
+  const name = String(body.name || 'file').slice(0, 200);
 
-router.post('/upload', requireAuth, upload.single('file'), (req, res) => {
-  if (!req.file) return bad(res, 'فایلی دریافت نشد');
-  store.createFile(req.file.filename, req.user.id, req.file.size);
-  res.json({ id: req.file.filename, size: req.file.size });
+  if (!dataBase64) return bad(res, 'فایلی دریافت نشد');
+  if (!/^[A-Za-z0-9+/=\s]+$/.test(dataBase64)) return bad(res, 'داده فایل نامعتبر است');
+
+  let bytes;
+  try {
+    bytes = Buffer.from(dataBase64, 'base64');
+  } catch {
+    return bad(res, 'داده فایل قابل خواندن نیست');
+  }
+  if (!bytes.length) return bad(res, 'فایل خالی است');
+  if (bytes.length > config.maxUploadBytes) return bad(res, 'حجم فایل بیش از حد مجاز است', 413);
+
+  // The client picks the id so it can bind the id into the file's AAD.
+  const clientId = String(body.id || '').trim();
+  const id = /^[A-Za-z0-9-]{8,64}$/.test(clientId) ? clientId : crypto.randomUUID();
+
+  fs.writeFileSync(path.join(config.filesDir, id), bytes);
+  store.createFile(id, req.user.id, bytes.length);
+  res.json({ id, size: bytes.length, name, mime });
 });
 
 router.get('/files/:id', (req, res) => {
@@ -286,6 +303,14 @@ router.get('/files/:id', (req, res) => {
   res.sendFile(path.join(config.filesDir, file.id));
 });
 
+/** base64 variant: React Native's fetch has no reliable arrayBuffer(). */
+router.get('/files/:id/base64', (req, res) => {
+  const file = store.getFile(req.params.id);
+  if (!file) return bad(res, 'پیدا نشد', 404);
+  const bytes = fs.readFileSync(path.join(config.filesDir, file.id));
+  res.json({ dataBase64: bytes.toString('base64'), size: file.size });
+});
+
 // ------------------------------------------------------------- presence
 
 router.get('/presence', requireAuth, (req, res) => {
@@ -294,11 +319,25 @@ router.get('/presence', requireAuth, (req, res) => {
   res.json({ presence: list });
 });
 
+/** Find people to talk to. Only authenticated users can search. */
+router.get('/users/search', requireAuth, (req, res) => {
+  const q = String(req.query.q || '').trim();
+  if (q.length < 2) return res.json({ users: [] });
+  const like = `%${q.replace(/[%_]/g, '')}%`;
+  const rows = store.db
+    .prepare(
+      `SELECT * FROM users WHERE username LIKE ? OR display_name LIKE ?
+       ORDER BY username LIMIT 20`,
+    )
+    .all(like, like);
+  res.json({ users: rows.map(store.publicUser) });
+});
+
 export const apiRouter = router;
 export { chatPayload, notifyChat };
 export const app = express();
 app.use(cors());
-app.use(express.json({ limit: '2mb' }));
+app.use(express.json({ limit: '60mb' }));
 app.use('/api', router);
 app.use((err, _req, res, _next) => {
   console.error(err);
