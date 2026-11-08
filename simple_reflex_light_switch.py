@@ -1,18 +1,24 @@
 class LightSwitchAgent:
     def __init__(self):
-        self.location = 0  # percept
-        self.environment = ['on', 'on', 'on', 'off']  # 2x2 grid: [on, on / on, off]
+        self.row = 0  # percept
+        self.col = 0
+        self.environment = [['on', 'on'],   # row 0: cell (0,0), cell (0,1)
+                            ['on', 'off']]  # row 1: cell (1,0), cell (1,1)
 
     def interpret_input(self):
-        return self.environment[self.location]  # state
+        return self.environment[self.row][self.col]  # state
 
     def rule_action(self, state):
         if state == 'on':
-            print("Turning off light in cell", self.location)
-            self.environment[self.location] = 'off'
+            print("Turning off light in cell", (self.row, self.col))
+            self.environment[self.row][self.col] = 'off'
         else:
             print("Moving to the next cell")
-            self.location = (self.location + 1) % len(self.environment)
+            if self.col == 0:          # left -> right, then top -> bottom
+                self.col = 1
+            else:
+                self.col = 0
+                self.row = (self.row + 1) % 2
 
 
 agent = LightSwitchAgent()
