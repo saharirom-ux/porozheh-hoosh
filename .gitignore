@@ -21,3 +21,12 @@ Thumbs.db
 dist/
 build/
 .expo/
+
+# local-only (روی سیستم می‌ماند، روی گیت‌هاب نمی‌رود)
+rafiq/
+*.tex
+*.aux
+*.toc
+*.out
+*.synctex.gz
+*.pdf
