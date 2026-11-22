@@ -1,0 +1,437 @@
+% !TeX program = xelatex
+% =====================================================================
+%  راهنمای دستور زبان لاتک
+%  کدهای ارائه‌شده در جزوه‌ی «جزوه آموزشی دستور زبان لاتک»
+%  (ویژه‌ی پشتیبانی زیپرشین / Zip Persian Support)
+%  نویسنده‌ی جزوه: S. M. A. Khatami
+%  کامپایل با XeLaTeX  (بسته xepersian)
+%  نکته: در متن فارسی، عبارت‌های لاتین باید داخل \lr{...} نوشته شوند.
+% =====================================================================
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+
+% ---------- بسته فارسی (آخرین بسته) ----------
+\usepackage{xepersian}
+\settextfont[Scale=1.1,BoldFont={B Nazanin Bold}]{B Nazanin}
+\setlatintextfont{Times New Roman}
+\setmonofont{Courier New}
+
+% نشانه‌های فهرست با فونت ریاضی (چون فونت B Nazanin گلیف بولت ندارد)
+\renewcommand{\labelitemi}{\(\bullet\)}
+\renewcommand{\labelitemii}{\(\bullet\)}
+\renewcommand{\labelitemiii}{\(\bullet\)}
+
+% ---------- تنظیمات نمایش کد ----------
+\definecolor{codebg}{RGB}{247,247,247}
+\definecolor{codekey}{RGB}{0,85,150}
+\definecolor{codestr}{RGB}{160,80,0}
+\definecolor{codecom}{RGB}{0,110,60}
+\definecolor{codefr}{RGB}{190,190,190}
+
+\lstdefinestyle{latexcode}{
+  language=TeX,
+  backgroundcolor=\color{codebg},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{codekey}\bfseries,
+  commentstyle=\color{codecom}\itshape,
+  stringstyle=\color{codestr},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=8pt,
+  frame=single,
+  rulecolor=\color{codefr},
+  framerule=0.4pt,
+  framesep=5pt,
+  breaklines=true,
+  breakatwhitespace=false,
+  showstringspaces=false,
+  tabsize=4,
+  columns=fullflexible,
+  keepspaces=true,
+  upquote=true,
+  aboveskip=10pt,
+  belowskip=10pt,
+}
+\lstset{style=latexcode}
+
+% ---------- راحتی‌ها ----------
+\newcommand{\code}[1]{\lr{\texttt{\small #1}}}
+\newcommand{\enp}[1]{\lr{(#1)}}
+\renewcommand{\lstlistingname}{کد}
+
+% محیط توضیحات (نکات) با نشان مربع توخالی
+\newenvironment{tnotes}
+  {\begin{itemize}\setlength{\itemsep}{3pt}\setlength{\parskip}{0pt}}
+  {\end{itemize}}
+
+% =====================================================================
+\begin{document}
+
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+
+{\Large دانشگاه ............ \par}
+\vspace{0.5cm}
+{\large دانشکده مهندسی کامپیوتر \par}
+\vspace{2cm}
+
+{\Huge\bfseries راهنمای دستور زبان لاتک \par}
+\vspace{0.8cm}
+{\LARGE\bfseries آموزش نگارش متن فارسی، فرمول و جدول \par}
+\vspace{0.4cm}
+{\large\lr{How to type with Latex} \par}
+
+\vspace{2cm}
+\begin{tabular}{r r}
+\textbf{نویسنده‌ی جزوه} & \lr{S. M. A. Khatami} \\
+\textbf{تاریخ ارائه} & آبان ۱۴۰۵ \\
+\textbf{منبع} & \lr{Zip Persian Support} \\
+\end{tabular}
+
+\vfill
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% =====================================================================
+\section*{مقدمه و تنظیمات اولیه}
+\addcontentsline{toc}{section}{مقدمه و تنظیمات اولیه}
+
+در این جزوه، ساختار استاندارد یک سند \lr{LaTeX} با پشتیبانی کامل از زبان فارسی
+(بسته‌ی \lr{xepersian}) معرفی می‌شود. سپس ساختار لیست‌ها، نوشتن فرمول‌های ریاضی،
+آدیه‌ها و ماتریس‌ها و در پایان جدول‌های ساده و رنگی آموزش داده می‌شود.
+همه‌ی کدهای این جزوه کامل و بدون خطا هستند و می‌توان آن‌ها را مستقیماً در
+\lr{TeXstudio} کپی و کامپایل کرد.
+
+% =====================================================================
+\section{فرم‌های پکیج‌ها و ساختار سند}
+
+کد زیر، اسکلت استاندارد یک سند فارسی با \lr{xepersian} است. دقت کنید که بسته‌ی
+فارسی باید آخرین بسته‌ای باشد که بارگذاری می‌شود.
+
+\begin{latin}
+\begin{lstlisting}[caption={اسکلت استاندارد سند فارسی}]
+\documentclass{article}
+\usepackage{xepersian}
+\settextfont{Yas}
+\usepackage{lipsum,amssymb,amsfonts}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage{array}
+
+\title{How to type with Latex}
+\author{S. M. A. Khatami}
+\date{Mehr 1405}
+
+\begin{document}
+    \maketitle
+\end{document}
+\end{lstlisting}
+\end{latin}
+
+\begin{tnotes}
+\item \textbf{نکته‌ی ۱:} بسته‌ی \lr{xepersian} برای پشتیبانی از زبان فارسی است و
+      باید پس از همه‌ی بسته‌های دیگر بارگذاری شود.
+\item \textbf{نکته‌ی ۲:} دستور \lr{\textbackslash settextfont\{Yas\}} نام فونت متن را
+      تعیین می‌کند؛ می‌توانید نام فونت دیگری را که روی سیستم خود نصب است بنویسید
+      (در این پروژه از \lr{B Nazanin} استفاده شده است).
+\item \textbf{نکته‌ی ۳:} بسته‌های کمکی برای ریاضیات \lr{amssymb} و \lr{amsfonts}،
+      لیست‌ها \lr{enumitem}، رنگ‌آمیزی جدول \lr{xcolor} با گزینه‌ی \lr{table} و
+      ساختار ستون‌های جدول \lr{array} آماده شده‌اند.
+\item \textbf{نکته‌ی ۴:} دستورات \lr{\textbackslash author}، \lr{\textbackslash title} و
+      \lr{\textbackslash date} اطلاعات عنوان، نویسنده و تاریخ را ذخیره می‌کنند که با
+      دستور \lr{\textbackslash maketitle} در صفحه‌ی اول چاپ می‌شوند.
+\end{tnotes}
+
+% =====================================================================
+\section{لیست‌ها و شماره‌گذاری}
+
+گاهی لازم است شماره‌گذاری یک فهرست از عددی غیر از ۱ آغاز شود. بسته‌ی
+\lr{enumitem} این امکان را با گزینه‌ی \lr{start} فراهم می‌کند.
+
+\begin{latin}
+\begin{lstlisting}[caption={فهرست شماره‌دار با شروع از ۱۲ و لیست تودرتو}]
+\begin{enumerate}[start=12]
+    \item download texlive
+    \item
+    \begin{itemize}
+        \item install a virtual cd drive
+        \item mount iso image of texlive
+        \item install texlive
+    \end{itemize}
+    \item download and install TexStdio
+\end{enumerate}
+\end{lstlisting}
+\end{latin}
+
+خروجی این کد به صورت زیر است:
+
+\begin{latin}
+\begin{enumerate}[start=12]
+    \item download texlive
+    \item
+    \begin{itemize}
+        \item install a virtual cd drive
+        \item mount iso image of texlive
+        \item install texlive
+    \end{itemize}
+    \item download and install TexStdio
+\end{enumerate}
+\end{latin}
+
+\begin{tnotes}
+\item \textbf{نکته‌ی ۱:} گزینه‌ی \lr{[start=12]} باعث می‌شود شماره‌گذاری فهرست از عدد
+      ۱۲ شروع شود.
+\item \textbf{نکته‌ی ۲:} یک لیست تودرتو (\lr{itemize}) درون محیط \lr{enumerate} ایجاد
+      شده است که آیتم‌های آن با نشان بولت نمایش داده می‌شوند.
+\end{tnotes}
+
+% =====================================================================
+\section{فرمول‌های ریاضی}
+
+\subsection{حل معادله‌ی درجه دوم}
+
+برای حل معادله‌ی $x^2-5x+6=0$ دو روش می‌توان به‌کار برد: روش اول بر پایه‌ی
+equalities جبری و روش دوم بر پایه‌ی فرمول دلتا. کد زیر هر دو روش را نشان می‌دهد.
+
+\begin{latin}
+\begin{lstlisting}[caption={نوشتن فرمول ریاضی در متن}]
+How solve the equatioin $x^2-5x+6=0$:
+\begin{itemize}[leftmargin=2cm]
+    \item[Method 1:] use \underline{algebraic} equalities
+        $$x^2-5x+6=(x-2)(x-3) $$
+        So $(x-2)(x-3) =0$ and \textbf{ therefore}
+        $x=2$ or $x=3$.
+    \item[Method 2:] Use the $\Delta $ method . For
+        equation $ax ^2+ bx+c=0$ set $\Delta =b^2-4ac$ and
+        then the roots are $$x=\frac{-b\mp\sqrt{ \Delta }}{2a}$$ here $\Delta =(-5) ^2-4(1) (6) =25-24=1$ and so
+        $$x=\frac{-(-5)\mp\sqrt{1}}{2(1) }=\frac{5\mp 1}{2}$$
+    \[
+    \begin{array}{c}
+        \frac{5+1}{2}=3\\
+        \frac{5- 1}{2}=2
+    \end{array}
+    \]
+\end{itemize}
+\end{lstlisting}
+\end{latin}
+
+خروجی این کد:
+
+\begin{latin}
+\begin{itemize}[leftmargin=2cm]
+    \item[Method 1:] use \underline{algebraic} equalities
+    \[
+        x^2-5x+6=(x-2)(x-3)
+    \]
+    So $(x-2)(x-3) =0$ and \textbf{ therefore}
+    $x=2$ or $x=3$.
+    \item[Method 2:] Use the $\Delta $ method . For
+    equation $ax ^2+ bx+c=0$ set $\Delta =b^2-4ac$ and
+    then the roots are
+    \[
+        x=\frac{-b\mp\sqrt{ \Delta }}{2a}
+    \]
+    here $\Delta =(-5) ^2-4(1) (6) =25-24=1$ and so
+    \[
+        x=\frac{-(-5)\mp\sqrt{1}}{2(1) }=\frac{5\mp 1}{2}
+    \]
+    \[
+    \begin{array}{c}
+        \frac{5+1}{2}=3\\
+        \frac{5- 1}{2}=2
+    \end{array}
+    \]
+\end{itemize}
+\end{latin}
+
+\begin{tnotes}
+\item \textbf{نکته‌ی ۱:} گزینه‌ی \lr{[leftmargin=2cm]} حاشیه‌ی چپ لیست را به اندازه‌ی
+      ۲ سانتی‌متر تنظیم می‌کند.
+\item \textbf{نکته‌ی ۲:} علامت \lr{\$} برای فرمول‌های درون‌خطی و \lr{\$\$} برای
+      فرمول‌های نمایشی (وسط‌چین) استفاده می‌شود.
+\item \textbf{نکته‌ی ۳:} دستور \lr{\textbackslash underline{}} زیر متن را خط می‌کشد و
+      دستور \lr{\textbackslash textbf{}} متن را پررنگ می‌کند.
+\item \textbf{نکته‌ی ۴:} برای نوشتن معادلات در چند سطر از محیط \lr{array} درون
+      \lr{\textbackslash left\{ ... \textbackslash right.} استفاده شده است.
+      \lr{\textbackslash left.} و \lr{\textbackslash right} اندازه‌ی اکولادهای
+      را با محتوای داخل محیط تطبیق می‌دهند.
+\item \textbf{نکته‌ی ۵:} دستور \lr{\textbackslash frac} برای کسر و \lr{\textbackslash sqrt}
+      برای ریشه‌ی دوم به‌کار می‌رود.
+\end{tnotes}
+
+\subsection{آدیه‌ها و ماتریس‌ها}
+
+برای رسم ماتریس‌ها از محیط \lr{array} استفاده می‌کنیم:
+
+\begin{latin}
+\begin{lstlisting}[caption={ساخت ماتریس با محیط array}]
+\[
+\begin{array}{ cc}
+    1 & 2 \\
+    3 & 8 \\
+    2 & x^2+x-1+ \frac{1}{4}
+\end{array}
+\]
+\end{lstlisting}
+\end{latin}
+
+خروجی این کد:
+
+\begin{latin}
+\[
+\begin{array}{ cc}
+    1 & 2 \\
+    3 & 8 \\
+    2 & x^2+x-1+ \frac{1}{4}
+\end{array}
+\]
+\end{latin}
+
+\begin{tnotes}
+\item \textbf{نکته‌ی ۱:} دستور \lr{\textbackslash left} یک براکت بزرگ در سمت چپ محیط
+      ایجاد می‌کند.
+\item \textbf{نکته‌ی ۲:} در \lr{\{cc\}} یعنی دو ستون و دو سطر. علامت \lr{\&} ستون‌ها
+      را از هم جدا می‌کند و \lr{\textbackslash\textbackslash} سطر جدید ایجاد می‌کند.
+\item \textbf{نکته‌ی ۳:} در نسخه‌ی اصلی جزوه، دستور \lr{\textbackslash end\{array\}} در
+      انتهای سطر آخر قرار گرفته بود که اصلاح شد تا کد بدون خطا کامپایل شود.
+\end{tnotes}
+
+% =====================================================================
+\section{جداول پیشرفته}
+
+\subsection{جدول ساده با ادغام ستون‌ها}
+
+\begin{latin}
+\begin{lstlisting}[caption={جدول ساده با خط‌کشی و ادغام ستون}]
+\begin{center}
+    \begin{tabular}{|c||c|c|c|c|c|c|}
+        \hline
+        &8-10&10 - 12&12 -2&2-4&4-6&6-8\\
+        \hline\hline
+        sat & & & & & & Spesial topics \\
+        \hline
+        sun & Spesial topics & & & && \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{lstlisting}
+\end{latin}
+
+خروجی این کد:
+
+\begin{latin}
+\begin{center}
+    \begin{tabular}{|c||c|c|c|c|c|c|}
+        \hline
+        &8-10&10 - 12&12 -2&2-4&4-6&6-8\\
+        \hline\hline
+        sat & & & & & & Spesial topics \\
+        \hline
+        sun & Spesial topics & & & && \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{latin}
+
+\begin{tnotes}
+\item \textbf{نکته‌ی ۱:} الگوی \lr{|c|c|...} یعنی ستون‌ها و سطرها هستند (خط‌کشیده
+      می‌شوند) و \lr{||} یعنی خط دوبل.
+\item \textbf{نکته‌ی ۲:} دستور \lr{\textbackslash hline} خط افقی می‌کشد. در پایان
+      سطر هم \lr{\textbackslash hline\textbackslash hline} خط دوبل می‌کشد.
+\end{tnotes}
+
+\subsection{جدول رنگی با عرض ثابت}
+
+\begin{latin}
+\begin{lstlisting}[caption={جدول رنگی با عرض ستون ثابت}]
+\begin{center}
+    \begin{tabular}{|c ||*{6}{>{\centering\arraybackslash}p{1.8cm}|}}
+        \hline
+        \rowcolor{gray!30}
+        & 8-10 & 10-12 & 12-2 & 2-4 & 4-6 & 6-8 \\
+        \hline\hline
+
+        \cellcolor{gray!30} sat
+        & & & & & &
+        Special topics \\
+        \hline
+
+        \cellcolor{gray!30} sun
+        & Special topics & & & & &
+        Special topics\\
+        \cline{7-7}
+        \cellcolor{gray!30}
+        & & & & & &
+        Computability \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{lstlisting}
+\end{latin}
+
+خروجی این کد:
+
+\begin{latin}
+\begin{center}
+    \begin{tabular}{|c ||*{6}{>{\centering\arraybackslash}p{1.8cm}|}}
+        \hline
+        \rowcolor{gray!30}
+        & 8-10 & 10-12 & 12-2 & 2-4 & 4-6 & 6-8 \\
+        \hline\hline
+
+        \cellcolor{gray!30} sat
+        & & & & & &
+        Special topics \\
+        \hline
+
+        \cellcolor{gray!30} sun
+        & Special topics & & & & &
+        Special topics\\
+        \cline{7-7}
+        \cellcolor{gray!30}
+        & & & & & &
+        Computability \\
+        \hline
+    \end{tabular}
+\end{center}
+\end{latin}
+
+\begin{tnotes}
+\item \textbf{نکته‌ی ۱:} الگوی \lr{*{6}{...}} یعنی ۶ ستون با تنظیماتی که در
+      \lr{\{>{\textbackslash centering\textbackslash arraybackslash\}p\{1.8cm\}\}}
+      مشخص شده است؛ یعنی یک پارگراف با عرض ۱.۸ سانتی‌متر که متن آن وسط‌چین است.
+\item \textbf{نکته‌ی ۲:} دستور \lr{\textbackslash rowcolor\{gray!30\}} کل سطر را با
+      رنگ خاکستری ۳۰ درصد رنگ‌آمیزی می‌کند.
+\item \textbf{نکته‌ی ۳:} دستور \lr{\textbackslash cellcolor\{gray!30\}} فقط یک خانه را
+      رنگ می‌کند.
+\item \textbf{نکته‌ی ۴:} دستور \lr{\textbackslash cline\{7-7\}} یک خط افقی فقط در ستون
+      هفتم ایجاد می‌کند تا دو آیتم داخل یک خانه از هم جدا شوند.
+\end{tnotes}
+
+% =====================================================================
+\section{جمع‌بندی}
+
+\begin{itemize}
+\item بسته‌ی \lr{xepersian} باید آخرین بسته باشد و فونت متن با
+      \lr{\textbackslash settextfont} تعیین می‌شود.
+\item بسته‌ی \lr{enumitem} کنترل کاملی روی شماره‌گذاری، فاصله‌ها و حاشیه‌های
+      لیست‌ها می‌دهد.
+\item فرمول‌ها با \lr{\$} (درون‌خطی) و \lr{\$\$} یا \lr{\textbackslash[ ... \textbackslash]}
+      (نمایشی) نوشته می‌شوند.
+\item محیط \lr{array} برای ماتریس‌ها و محیط \lr{tabular} برای جدول‌ها به‌کار می‌رود؛
+      با بسته‌ی \lr{xcolor} و گزینه‌ی \lr{table} می‌توان سطرها و خانه‌ها را رنگی کرد.
+\end{itemize}
+
+\end{document}

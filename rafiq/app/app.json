@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "رفیق",
+    "slug": "rafiq",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#0E1621",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "app.rafiq.chat"
+    },
+    "android": {
+      "package": "app.rafiq.chat",
+      "edgeToEdgeEnabled": true
+    },
+    "plugins": [
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "برای فرستادن عکس به چت‌ها به دسترسی تصاویر نیاز است."
+        }
+      ]
+    ]
+  }
+}
